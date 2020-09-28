@@ -113,14 +113,19 @@ class Reader():
         if not os.path.exists(foldername):
             os.mkdir(foldername) 
 
+
+        if not zero_based: base = 1
+        else             : base = 0
+
+
         saveToFile = lambda filename, array, dtype:np.savetxt(os.path.join(foldername,filename) ,
                                                              array,fmt=dtype,
                                                              delimiter='\t',
                                                              header = "{}".format( array.shape[0] ) )
 
         saveToFile( "nodes.dat"           , self.nodes           , '%.18f')# Write Nodes
-        saveToFile( "elements.dat"        , self.elements        , '%d'   )# Write Elements
-        saveToFile( "surface_elements.dat", self.surface_elements, '%d'   )# Surface Elements
+        saveToFile( "elements.dat"        , self.elements+base   , '%d'   )# Write Elements
+        saveToFile( "surface_elements.dat", self.surface_elements+base, '%d'   )# Surface Elements
         #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
         # Write Boundaries 
         #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
