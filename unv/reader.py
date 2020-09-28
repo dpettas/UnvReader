@@ -1,6 +1,8 @@
 from   unv.group   import *
 from   unv.session import *
-import numpy      as np
+
+import numpy       as np
+import os 
 
 
 DELIM = "-1"
@@ -13,6 +15,9 @@ def isDelimiter(line: str):
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 class Reader():
+    """
+    """
+
     def __init__(self, filename):
 
         self.filename         = filename 
@@ -80,10 +85,11 @@ class Reader():
         
         ids = self.getNodeIDsThatBelongToGroup(groupname)
 
-        if   direction.lower() == 'x': dire_ = 0
-        elif direction.lower() == 'y': dire_ = 1
-        elif direction.lower() == 'z': dire_ = 2
-        else: raise ValueError("Wrong Value for direction. Possible: x,y,z")
+        if   direction.lower() == 'x'  : return np.asarray([self.nodes[i][0] for i in ids] )
+        elif direction.lower() == 'y'  : return np.asarray([self.nodes[i][1] for i in ids] )
+        elif direction.lower() == 'z'  : return np.asarray([self.nodes[i][2] for i in ids] )
+        elif direction.lower() == 'all': return np.asarray([self.nodes[i]    for i in ids] )
+        else: raise ValueError("Wrong Value for direction. Possible: x,y,z or all")
 
         return np.asarray([self.nodes[i][dire_] for i in ids] )
             
@@ -102,7 +108,29 @@ class Reader():
     def getElements(self):
         return self.elements
 
+    def exportTofolder(self, foldername: str, zero_based: bool = True):
+       
+        if not os.path.exists(foldername):
+            os.mkdir(foldername) 
 
+        saveToFile = lambda filename, array:np.savetxt(os.path.join(foldername,filename) ,
+                                                       array,
+                                                       delimiter='\t',
+                                                       header = "{}".format( array.shape[0] ) )
+
+        saveToFile( "nodes.dat", self.nodes) # Write Nodes
+        saveToFile( "elements.dat", self.nodes) # Write Elements
+        saveToFile( "surface_elements.dat", self.nodes)# Surface Elements
+        #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+        # Write Boundaries 
+        #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+        ibnd = 0
+        for bnd in self.getGroupNames():
+            ibnd += 1
+            
+            bndname = "bnd_{}_{}_nodes.dat".format( ibnd, bnd)
+            nodes = self.getNodeCoordinateThatBelongToGroup(bnd,'all')
+            saveToFile(bndname, nodes)
 
 
 
@@ -195,8 +223,5 @@ class Reader():
 
                 self.__groups.append ( Group(  line[init:final+1] ) ) 
 
-
-
-
             if i >= len(line) -1: break
-
+    
