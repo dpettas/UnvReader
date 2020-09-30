@@ -163,7 +163,7 @@ class Reader():
 
         ibnd = 0
         for bnd in self.getGroupNames():
-            print(bnd)
+
             ibnd += 1
 
             bndelements = []
