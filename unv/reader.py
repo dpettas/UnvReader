@@ -178,7 +178,7 @@ class Reader():
 
 
             bndname = "bnd_{}_{}_elements.dat".format(ibnd,bnd)
-            saveToFile(bndname, bndelements,'%d')
+            saveToFile(bndname, bndelements + base,'%d')
 
             bndname = "bnd_{}_{}_faces.dat".format(ibnd,bnd)
             saveToFile(bndname, bndfaces,'%d')
