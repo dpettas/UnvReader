@@ -3,7 +3,7 @@ from   unv.session import *
 
 import numpy       as np
 import os
-
+import sys
 
 DELIM = "-1"
 
@@ -284,6 +284,26 @@ class Reader():
         corresponding face (1,2,3) of the triangle
         """
         elementID = -1
+
+        snode = self.surface_elements[surfaceElementID]
+        for elem in self.elements:
+            bnode = elem
+            elementID += 1
+
+            if   ( snode[0] == bnode[0]  and snode[1] == bnode[1] ): return elementID, 1
+            elif ( snode[0] == bnode[1]  and snode[1] == bnode[2] ): return elementID, 2
+            elif ( snode[0] == bnode[2]  and snode[1] == bnode[0] ): return elementID, 3
+
+            elif ( snode[1] == bnode[0]  and snode[0] == bnode[1] ): return elementID, 1
+            elif ( snode[1] == bnode[1]  and snode[0] == bnode[2] ): return elementID, 2
+            elif ( snode[1] == bnode[2]  and snode[0] == bnode[0] ): return elementID, 3
+
+    def _linear_search(self, surfaceElementID ):
+        """
+        Returns The ID of the triangle that lies in the Boundary as well as the
+        corresponding face (1,2,3) of the triangle
+        """
+        elementID = -1
         for element in self.elements:
 
             snode = self.surface_elements[surfaceElementID]
@@ -293,5 +313,3 @@ class Reader():
             if   ( snode[0] == bnode[0]  and snode[1] == bnode[1] ): return elementID, 1
             elif ( snode[0] == bnode[1]  and snode[1] == bnode[2] ): return elementID, 2
             elif ( snode[0] == bnode[2]  and snode[1] == bnode[0] ): return elementID, 3
-
-
