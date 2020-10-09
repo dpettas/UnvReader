@@ -28,8 +28,6 @@ class Group():
         reads the connectivity from the corresponding boundary
         """
         NUMCOLS      = 8 
-        ELEMENT_FLAG = 8
-        NODE_FLAG    = 7 
 
         elem = []
 
@@ -42,22 +40,17 @@ class Group():
             # The number of the lines should be either 8 or 4
             if len(lline) == NUMCOLS:
                
-                # Read the type of the entity 
-                tp = int(lline[0])
-              
-
+            
                 # If the type is 8 then the entity refers to the id of the
                 # surface element
-
-                if tp == ELEMENT_FLAG:  
-
+                if self.__isElementGroup(line):  
                     bndelement1 = int(lline[1]) - 1
                     bndelement2 = int(lline[5]) - 1
 
                     elem.append( bndelement1 )
                     elem.append( bndelement2 )
 
-                elif tp == NODE_FLAG: 
+                elif self.__isNodeGroup(line): 
                     raise NotImplementedError("The node case at the group has not implemented yet")
 
 
@@ -66,16 +59,34 @@ class Group():
             # so the line has only the half columns 
             if len(lline) == int(NUMCOLS/2):
 
-                if tp == ELEMENT_FLAG:  
+                if self.__isElementGroup(line):  
 
                     bndelement1 = int(lline[1]) - 1
                     elem.append( bndelement1 )
 
-                elif tp == NODE_FLAG: 
+                elif self.__isNodeGroup(line): 
                     raise NotImplementedError("The node case at the group has not implemented yet")
 
 
 
         self.connectivity = elem
+
+    def __isElementGroup(self,line: str):
+        
+        # This is a list of integers 
+        ELEMENT_FLAG = 8
+        flags        = [ int(itm) for itm in line.split() ]
+        if flags[0] == ELEMENT_FLAG and flags[-1] == 0:
+            return True
+        return False
+
+    def __isNodeGroup(self,line: str):
+        
+        # This is a list of integers 
+        NODE_FLAG    = 7
+        flags        = [ int(itm) for itm in line.split() ]
+        if flags[0] == NODE_FLAG and flags[-1] == 0:
+            return True
+        return False
 
     def __iter__(self): return iter(self.__lines)

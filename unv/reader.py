@@ -53,7 +53,6 @@ class Reader():
     def getGroup(self, name) -> Group:
 
         names = [ g.title for g in self.__groups]
-
         for g in self.__groups:
             if name == g.title: return g
 
@@ -74,13 +73,14 @@ class Reader():
 
     def getNodeIDsThatBelongToGroup(self,groupname: str):
         out = []
+        element = [0,0]
         for elementid in self.getGroup(groupname).connectivity:
 
             element = self.surface_elements[elementid]
             out.append( element[0] )
+            out.append( element[1] )
 
-        out.append( element[1] )
-        return out
+        return set(out)
 
     def getElementsAndFacesThatBelongToGroup(self, groupname: str) -> list:
         return [ self.__linear_search(selem) for selem in
