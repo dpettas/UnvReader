@@ -63,7 +63,7 @@ class Reader():
         return self.nodes.shape[0]
 
     def getNumElements(self):
-        return self.elements.size
+        return self.elements.shape[0]
 
     def getNumSurfaceElements(self):
         return self.surface_elements.size
