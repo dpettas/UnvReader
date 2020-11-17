@@ -17,7 +17,7 @@ xt        = refinement.getNodeCoordinates('x')
 yt        = refinement.getNodeCoordinates('y')
 triangles = refinement.getElements()
 
-
+refinement.toAsciiTecplot("test.plt","refined1",renameCoords = "Z R")
 plt.triplot(xt, yt, triangles, linewidth = 1.5)
 
 

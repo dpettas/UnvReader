@@ -184,7 +184,30 @@ class Reader():
             saveToFile(bndname, bndfaces,'%d')
 
 
-#for element,face in unvfile.getElementsAndFacesThatBelongToGroup('Bubble'):
+    def toAsciiTecplot(self, filename, zone, renameCoords = "X Y"):
+    
+        xt        = self.getNodeCoordinates('x')
+        yt        = self.getNodeCoordinates('y')
+        triangles = self.getElements()
+
+        renameCoords = renameCoords.split() 
+        if len(renameCoords) != 2: raise ValueError("renameCoords should contain 2 variable names")
+
+
+        with open(filename,'w') as tec:
+
+            tec.write('VARIABLES = "{}", "{}"\n'.format( renameCoords[0], renameCoords[1] ) )
+            tec.write(' ZONE T = "{}", DATAPACKING=POINT,N={},E={},ZONETYPE=FETRIANGLE\n'.format(zone, self.getNumNodes(), self.getNumElements() ) )
+
+
+            for i in range(self.getNumNodes()):
+                tec.write("{0:.8f} {1:.8f}\n".format(xt[i],yt[i]) )
+
+            # first based indexing
+            for i in range(self.getNumElements()):
+                tec.write("{} {} {}\n".format( triangles[i][0]+1, triangles[i][1]+1, triangles[i][2]+1) )
+
+
 
     #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     # Private Methods  
