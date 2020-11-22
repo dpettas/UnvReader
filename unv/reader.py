@@ -142,7 +142,6 @@ class Reader():
         if not os.path.exists(foldername):
             os.mkdir(foldername)
 
-
         if not zero_based: base = 1
         else             : base = 0
 
@@ -163,25 +162,28 @@ class Reader():
 
         ibnd = 0
         for bnd in self.getGroupNames():
-
+            
             ibnd += 1
-
             bndelements = []
             bndfaces    = []
 
-            for element, face in BNDELEMENTS(bnd):
-                bndelements.append( element )
-                bndfaces.append   ( face    )
+            try: 
+                for element, face in BNDELEMENTS(bnd):
+                    bndelements.append( element )
+                    bndfaces.append   ( face    )
+                
+                bndelements = np.asarray( bndelements, dtype = int )
+                bndfaces    = np.asarray( bndfaces   , dtype = int )
 
-            bndelements = np.asarray( bndelements, dtype = int )
-            bndfaces    = np.asarray( bndfaces   , dtype = int )
 
+                bndname = "bnd_{}_{}_elements.dat".format(ibnd,bnd)
+                saveToFile(bndname, bndelements + base,'%d')
 
-            bndname = "bnd_{}_{}_elements.dat".format(ibnd,bnd)
-            saveToFile(bndname, bndelements + base,'%d')
+                bndname = "bnd_{}_{}_faces.dat".format(ibnd,bnd)
+                saveToFile(bndname, bndfaces,'%d')
+            except:
+                print("The Group : {} is not a boundary probably is a refinement region".format(bnd))
 
-            bndname = "bnd_{}_{}_faces.dat".format(ibnd,bnd)
-            saveToFile(bndname, bndfaces,'%d')
 
 
     def toAsciiTecplot(self, filename, zone, renameCoords = "X Y"):

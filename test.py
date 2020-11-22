@@ -3,29 +3,27 @@ import unv
 import timeit 
 
 
-# initial   = unv.Reader("/home/pettas/MyWork/LabFem/UnBounded.unv")
-# xt        = initial.getNodeCoordinates('x')
-# yt        = initial.getNodeCoordinates('y')
-# triangles = initial.getElements()
-
-# plt.triplot(xt, yt, triangles, linewidth = 1.5)
-# Read the unv file
+# refinement = unv.Reader("./Mesh_2.unv")
 refinement = unv.Reader("./Mesh_2.unv")
+refinement.exportTofolder("test", zero_based = False)
+
+
+
 
 # Get the coordinates of the bulk nodes 
-xt        = refinement.getNodeCoordinates('x')
-yt        = refinement.getNodeCoordinates('y')
-triangles = refinement.getElements()
+# xt        = refinement.getNodeCoordinates('x')
+# yt        = refinement.getNodeCoordinates('y')
+# triangles = refinement.getElements()
 
-refinement.toAsciiTecplot("test.plt","refined1",renameCoords = "Z R")
-plt.triplot(xt, yt, triangles, linewidth = 1.5)
+# refinement.toAsciiTecplot("test.plt","refined1",renameCoords = "Z R")
+# plt.triplot(xt, yt, triangles, linewidth = 1.5)
 
 
-plt.axis('off')
-plt.axes().set_aspect(1.0)
-plt.tight_layout()
+# plt.axis('off')
+# plt.axes().set_aspect(1.0)
+# plt.tight_layout()
 
-plt.show()
+# plt.show()
 
 # Get the bulk elements
 
