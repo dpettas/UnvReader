@@ -182,6 +182,7 @@ class Reader():
                 bndname = "bnd_{}_{}_faces.dat".format(ibnd,bnd)
                 saveToFile(bndname, bndfaces,'%d')
             except:
+                print("[unv Warning] : exportTofolder")
                 print("The Group : {} is not a boundary probably is a refinement region".format(bnd))
 
 
