@@ -1,4 +1,4 @@
-from   unv.group   import *
+from   unv.group   import 0
 from   unv.session import *
 
 import numpy       as np
@@ -45,7 +45,8 @@ class Reader():
         for session in self.__sessions:
             if session.gid() == gid: return session.lines
 
-        raise ValueError("Wrong argument for gid")
+        return None
+        # raise ValueError("Wrong argument for gid")
 
     def getGroupNames(self):
         return [g.title for g in self.__groups]
@@ -285,6 +286,7 @@ class Reader():
     def __UNV_id_2467(self):
 
         line = self.getSessionWithId(2467)
+        if line == None: return
 
         # First Element of the the session is the gid of the session
         i = 1
