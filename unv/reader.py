@@ -81,7 +81,7 @@ class Reader():
             out.append( element[0] )
             out.append( element[1] )
 
-        return set(out)
+        return list(dict.fromkeys(out) )
 
     def getElementsAndFacesThatBelongToGroup(self, groupname: str) -> list:
         return [ self.__linear_search(selem) for selem in
